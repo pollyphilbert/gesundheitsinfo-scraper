@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 
-from .models import Base, Topic, Section, ContentBlock, TopicLink
+from .models import Base, Topic, Section, ContentBlock, TopicLink, GlossaryTerm, TopicGlossaryLink
 
 class SQLAlchemyPipeline:
     def open_spider(self, spider):
@@ -57,7 +57,7 @@ class SQLAlchemyPipeline:
             
             section = Section(
                 title=section_title,
-                theme=topic
+                topic=topic
             )
             self.session.add(section)
             self.session.flush()
@@ -98,6 +98,36 @@ class SQLAlchemyPipeline:
                     href=href
                 )
                 self.session.add(topic_link)
+        
+        # create glossary terms and links
+        for g in item.get("glossary_refs", []):
+            term_obj = self.session.query(GlossaryTerm).filter_by(term=g["term"]).first()
+            if not term_obj:
+                term_obj = GlossaryTerm(
+                    term=g["term"], 
+                    description=g.get("description"), 
+                    url=g.get("href")
+                    )
+                self.session.add(term_obj)
+                self.session.flush()
+
+            # link to topic
+            link_obj = self.session.query(TopicGlossaryLink).filter_by(
+                topic_id=topic.id,
+                glossary_term_id=term_obj.id
+            ).first()
+
+            if link_obj:
+                link_obj.count += 1
+            else:
+                #create new link
+                link_obj = TopicGlossaryLink(
+                    topic=topic,
+                    glossary_term=term_obj,
+                    count=1
+                )
+                self.session.add(link_obj)
+
 
         #adding to session
         self.session.add(topic)

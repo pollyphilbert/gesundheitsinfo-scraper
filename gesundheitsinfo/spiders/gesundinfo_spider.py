@@ -79,6 +79,8 @@ class GesuninfoSpider(scrapy.Spider):
             if (abs_url.endswith(".html") and abs_url != response.url):
                 links_from_here.append({"href": abs_url})
 
+        glossary_refs = [] 
+
         # getting sections
         #section_nodes = response.css("h2.topicHeader")
         section_nodes = response.css("main article h2")
@@ -101,6 +103,7 @@ class GesuninfoSpider(scrapy.Spider):
                 # Text paragraphs
                 if tag == "p":
 
+                    # Extract glossary terms
                     for span in node.xpath(".//span[contains(@class,'glossaryLink')]"):
                             term = span.attrib.get("data-title")
                             desc = span.attrib.get("data-desc")
@@ -113,17 +116,14 @@ class GesuninfoSpider(scrapy.Spider):
                             if href:
                                 href = response.urljoin(href)
 
-                            content_blocks.append({
-                                "block_type": "glossary",
-                                "content": json.dumps({
+                            if term:
+                                glossary_refs.append({
                                     "term": term,
-                                    "description": desc
-                                }, ensure_ascii=False),
-                                "href": href,
-                                "order_index": order
-                            })
-                            order += 1
+                                    "description": desc,
+                                    "href": href
+                                })
 
+                    # Extract normal text
                     text = " ".join(
                         node.xpath(
                             ".//text()[normalize-space() and not(ancestor::span[contains(@class,'glossaryLink')])]"
@@ -233,7 +233,8 @@ class GesuninfoSpider(scrapy.Spider):
             "url": response.url,
             "last_updated_at": last_updated_at,
             "sections": sections,
-            "links_from_here": links_from_here
+            "links_from_here": links_from_here,
+            "glossary_refs": glossary_refs
         }
 
 

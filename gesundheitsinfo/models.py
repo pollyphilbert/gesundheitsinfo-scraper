@@ -19,20 +19,6 @@ class Topic(Base):
         cascade="all, delete-orphan"
         )
     
-    # links_from_here = relationship(
-    #     "TopicLink", 
-    #     back_populates="from_topic", 
-    #     cascade="all, delete-orphan",
-    #     foreign_keys="TopicLink.from_topic_id"
-    #     )
-    
-    # links_to_here = relationship(
-    #     "TopicLink",
-    #     back_populates="to_topic",
-    #     cascade="all, delete-orphan",
-    #     foreign_keys="TopicLink.to_topic_id"
-    # )
-   
 
 class Section(Base):
     __tablename__ = "sections"
@@ -95,3 +81,24 @@ class TopicLink(Base):
         foreign_keys=[to_topic_id],
         backref="links_to_here"
     )
+
+class GlossaryTerm(Base):
+    __tablename__ = "glossary_terms"
+
+    id = Column(Integer, primary_key=True)
+    term = Column(Text, nullable=False, unique=True)
+    description = Column(Text, nullable=True)
+    url = Column(Text, nullable=True)
+
+class TopicGlossaryLink(Base):
+    __tablename__ = "topic_glossary_links"
+
+    ig = Column(Integer, primary_key=True)
+
+    topic_id = Column(Integer, ForeignKey("topics.id"), nullable=False)
+    glossary_term_id = Column(Integer, ForeignKey("glossary_terms.id"), nullable=False)
+
+    count = Column(Integer, default=1) # number of times referenced on this topic
+
+    topic = relationship("Topic", backref="glossary_links")
+    glossary_term = relationship("GlossaryTerm", backref="references")
