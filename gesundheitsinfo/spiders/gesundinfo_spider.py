@@ -2,6 +2,7 @@ import scrapy
 import json
 from gesundheitsinfo.utils.date_parsers import parse_german_date
 
+
 class GesuninfoSpider(scrapy.Spider):
     name = "gesundheitsinfo"
 
@@ -17,6 +18,12 @@ class GesuninfoSpider(scrapy.Spider):
 
         if self.test_mode and self.test_url:
             self.start_urls = [self.test_url]
+    
+
+    def start_requests(self):
+         for url in self.start_urls:
+            self.visited.add(url)
+            yield scrapy.Request(url, callback=self.parse)
 
     def parse(self, response):
         # test mode
@@ -38,10 +45,10 @@ class GesuninfoSpider(scrapy.Spider):
 
         for link in links:
             full_url = response.urljoin(link)
-
-            if full_url not in self.visited:
-                self.visited.add(full_url)
-                yield response.follow(full_url, callback=self.parse_topic)
+            yield response.follow(full_url, callback=self.parse_topic)
+            # if full_url not in self.visited:
+            #     self.visited.add(full_url)
+            #     yield response.follow(full_url, callback=self.parse_topic)
 
         for href in response.css("a::attr(href)").getall():
             if "/themen-von-a-bis-z/" in href:
@@ -77,7 +84,11 @@ class GesuninfoSpider(scrapy.Spider):
                 continue
 
             if (abs_url.endswith(".html") and abs_url != response.url):
-                links_from_here.append({"href": abs_url})
+                links_from_here.append(abs_url)
+
+                if abs_url not in self.visited:
+                    self.visited.add(abs_url)
+                    yield response.follow(abs_url, callback=self.parse_topic)
 
         glossary_refs = [] 
 

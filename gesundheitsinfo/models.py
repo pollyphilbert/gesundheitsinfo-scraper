@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, TIMESTAMP, func, Date, ForeignKey, String
+from sqlalchemy import Column, Integer, Text, TIMESTAMP, func, Date, ForeignKey, String, Boolean
 from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
@@ -11,7 +11,9 @@ class Topic(Base):
     themengebiet = Column(Text)
     url = Column(Text, unique=True, nullable=False)
     last_updated_at = Column(Date, nullable=True)
-    #scraped_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
+    #crawled_at = Column(TIMESTAMP(timezone=True), nullable=True)
+
+    is_placeholder = Column(Boolean, default=True)
 
     sections = relationship(
         "Section", 
@@ -69,7 +71,8 @@ class TopicLink(Base):
     from_topic_id = Column(Integer, ForeignKey("topics.id"), nullable=False)
     to_topic_id = Column(Integer, ForeignKey("topics.id"), nullable=True)
 
-    href = Column(Text, nullable=False)  # url on the page
+    href = Column(Text, nullable=False)  # url of the page
+    count = Column(Integer, default=1)
 
     from_topic = relationship(
         "Topic",
@@ -93,7 +96,7 @@ class GlossaryTerm(Base):
 class TopicGlossaryLink(Base):
     __tablename__ = "topic_glossary_links"
 
-    ig = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
 
     topic_id = Column(Integer, ForeignKey("topics.id"), nullable=False)
     glossary_term_id = Column(Integer, ForeignKey("glossary_terms.id"), nullable=False)
