@@ -97,7 +97,7 @@ To transorm HTML pages of gesundheitsinformation.de into a structured knowledge 
 
 The pipeline is based on [Scrapy](https://www.scrapy.org/) for crawling and [SQLAlchemy](https://www.sqlalchemy.org/) for structured storage in a [PostgreSQL](https://www.postgresql.org/) database.
 
-![pipeline](pipeline.png)
+![pipeline](docs/images/pipeline.png)
 
 ### Crawling
 
@@ -189,7 +189,7 @@ To achieve the goal of this practical, a dedicated data model was designed in Po
 
 The database schema reflects the semantic structure of the website and allows pages, sections, content elements, links and glossary terms to be represented as interconnected entities.
 
-![Datenbank Schema](db_schema.png)
+![Datenbank Schema](docs/images/db_schema.png)
 
 The structure of the database can be represented by the following relations:
 
@@ -215,7 +215,7 @@ Across these pages, the crawler identified **13039 sections** containing a total
 ### Distribution of Content Types
 Because each element of a section is classified during crawling, it is possible to analyze how information is presented across the entire website.
 
-<img src="content_distr.png" style="width:170px;">
+<img src="docs/images/content_distr.png" style="width:170px;">
 
 The distribution of block types shows how information is presented across the platform.
 The high number of textual blocks reflects the explanatory nature of the website, while the presence of lists, tables, and media elements indicates structured medical information rather than simple narrative text.
@@ -226,7 +226,7 @@ By storing links between pages together with their frequency, the crawler implic
 
 The following pages are most frequently referenced by other topic pages.
 
-<img src="most_ref_pages.png" style="width:350px;">
+<img src="docs/images/most_ref_pages.png" style="width:350px;">
 
 The page *„Vom IQWiG bewertete Wirkstoffe“* serves as a central reference hub, likely because it aggregates evaluations of multiple pharmaceutical substances. Its high number of incoming references suggests that many disease-specific pages link to it when discussing medication or treatment options.
 
@@ -236,7 +236,7 @@ In total, our crawler identified **434 unique glossary terms** across all topic 
 
 Because glossary terms are linked to pages with reference counters, we can analyze their usage.
 
-<img src="most_ref_gloss.png" style="width:350px;">
+<img src="docs/images/most_ref_gloss.png" style="width:350px;">
 
 This information can be used to indicate core medical concepts that appear throughout many different topics.
 
