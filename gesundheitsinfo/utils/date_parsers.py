@@ -1,3 +1,13 @@
+"""
+Utility functions for parsing German date strings.
+
+Currently supports parsing strings in format:
+    "Aktualisiert am 12. März 2023"
+
+Returns:
+    datetime.date object or None if parsing fails.
+"""
+
 import datetime
 
 GERMAN_MONTHS = {
@@ -17,6 +27,20 @@ GERMAN_MONTHS = {
 }
 
 def parse_german_date(text: str):
+    """
+    Parse German update date string into datetime.date.
+
+    Expected formats:
+        "Aktualisiert am 12. März 2023"
+        "12. März 2023"
+
+    Args:
+        text (str): Raw text containing German date.
+
+    Returns:
+        datetime.date | None
+    """
+
     if not text:
         return None
 
@@ -34,4 +58,5 @@ def parse_german_date(text: str):
             int(day),
         )
     except Exception:
+        # Prevents crawler from crashing on unexpected formats
         return None
