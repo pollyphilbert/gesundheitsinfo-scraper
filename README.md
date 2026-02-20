@@ -210,7 +210,7 @@ Pages consist of ordered sections, sections consist of semantic content blocks, 
 
 After the crawling process, the crawler database contains **2761 pages** extracted from the website.
 
-Across these pages, the crawler identified **13039 sections** containing a total of **70341 content blocks**.
+Across these pages, the crawler identified **13097 sections** containing a total of **70998 content blocks**.
 
 ### Distribution of Content Types
 Because each element of a section is classified during crawling, it is possible to analyze how information is presented across the entire website.
@@ -232,7 +232,7 @@ The page *„Vom IQWiG bewertete Wirkstoffe“* serves as a central reference hu
 
 ### Glossary Vocabulary
 
-In total, our crawler identified **434 unique glossary terms** across all topic pages.
+In total, our crawler identified **435 unique glossary terms** across all topic pages.
 
 Because glossary terms are linked to pages with reference counters, we can analyze their usage.
 
