@@ -17,7 +17,7 @@ The aim of this practical is therefore not merely to extract text from web pages
 - the network of internal links between pages;
 - and the references to medical glossary terms.
 
-This results in a **structured knowledge base** that can later be used for applications such as search, question answering, knowledge graphs, or Retrieval-Augmented Generation systems.
+This results in a **relational Database** of medical content that can later be used for applications such as search, question answering, knowledge graphs, or Retrieval-Augmented Generation systems.
 
 ## Data
 
@@ -93,7 +93,7 @@ The *last updated* date is provided as German text (e.g., _Aktualisiert am 20. M
 
 ## Architecture and Crawling Pipeline
 
-To transorm HTML pages of gesundheitsinformation.de into a structured knowledge base, we implemented a multi-stage processing pipeline. It separates crawling, reconstruction of page content and database storage into clearly defined stages. Where each stage performs a specific transformation of the data, converting raw HTML into a relational representation of the website's content.
+To transorm HTML pages of gesundheitsinformation.de into a structured relational database, we implemented a multi-stage processing pipeline. It separates crawling, reconstruction of page content and database storage into clearly defined stages. Where each stage performs a specific transformation of the data, converting raw HTML into a relational representation of the website's content.
 
 The pipeline is based on [Scrapy](https://www.scrapy.org/) for crawling and [SQLAlchemy](https://www.sqlalchemy.org/) for structured storage in a [PostgreSQL](https://www.postgresql.org/) database.
 
@@ -201,12 +201,12 @@ The structure of the database can be represented by the following relations:
 
 **references**(count, (<u>from_page_id</u>) → Page, (<u>to_page_id</u>) → Page)
 
-Pages consist of ordered sections, sections consist of semantic content blocks, pages reference glossary concepts, and pages reference each other through directed links. This relational view highlights the transformation of the website into a structured knowledge graph.
+Pages consist of ordered sections, sections consist of semantic content blocks, pages reference glossary concepts, and pages reference each other through directed links. This relational view highlights the transformation of the website into a structured database.
 
 
 ## Results and Capabilities of the System
 
-### Size of a Knowledge Base
+### Size of a Database
 
 After the crawling process, the crawler database contains **2761 pages** extracted from the website.
 
@@ -255,7 +255,7 @@ In other words, the database is now a structured representation of medical knowl
 
 ## Conclusion
 
-In this practical we developed a structured web crawling pipeline to transform the semi-structured HTML content of *gesundheitsinformation.de* into a relational knowledge base.
+In this practical we developed a structured web crawling pipeline to transform the semi-structured HTML content of *gesundheitsinformation.de* into a relational database.
 
 The implemented architecture separates crawling, semantic reconstruction, and database storage into clearly defined stages. This design enables incremental crawling, avoids duplication and results it in a structured, queryable representation.
 
