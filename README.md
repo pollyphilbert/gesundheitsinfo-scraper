@@ -97,7 +97,7 @@ To transorm HTML pages of gesundheitsinformation.de into a structured relational
 
 The pipeline is based on [Scrapy](https://www.scrapy.org/) for crawling and [SQLAlchemy](https://www.sqlalchemy.org/) for structured storage in a [PostgreSQL](https://www.postgresql.org/) database.
 
-![pipeline](docs/images/pipeline.png)
+![pipeline](docs/images/pipeline1.png)
 
 ### Crawling
 
